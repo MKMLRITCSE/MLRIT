@@ -16,7 +16,19 @@ const DEPARTMENTS: { key: string; label: string; short: string }[] = [
   { key: 'mechanical',   label: 'Mechanical Engineering',                   short: 'MECH'    },
   { key: 'aeronautical', label: 'Aeronautical Engineering',                 short: 'AERO'    },
   { key: 'cse-ds',       label: 'CSE (Data Science)',                       short: 'CSE-DS'  },
+  { key: 'mba',          label: 'Master of Business Administration',         short: 'MBA'     },
 ];
+
+// Programmes whose syllabus is published as one complete document rather than
+// subject-wise semester PDFs.
+const COMPLETE_SYLLABUS: Record<string, { code: string; title: string; meta: string; href: string }> = {
+  mba: {
+    code: 'MBA · R25',
+    title: 'MBA R25 Syllabus',
+    meta: '2025 regulation · Word document',
+    href: '/syllabus/mba-r25-syllabus.docx',
+  },
+};
 
 const REGULATIONS: { key: string; label: string }[] = [
   { key: 'r25',   label: 'R25'   },
@@ -114,6 +126,7 @@ export default function SyllabusPageView({ content }: { content: Record<string, 
 
   function chooseDept(d: string) { setDept(d); setReg(''); setSem(null); }
   function chooseReg(r: string)  { setReg(r);  setSem(null); }
+  const completeSyllabus = COMPLETE_SYLLABUS[dept];
 
   return (
     <>
@@ -145,7 +158,7 @@ export default function SyllabusPageView({ content }: { content: Record<string, 
             <p className="font-mono text-[0.68rem] font-bold tracking-[0.2em] uppercase text-muted mb-3">{copy('step1Department', 'Step 1 — Department')}</p>
             <div className="flex flex-wrap gap-2">
               {DEPARTMENTS.map((d) => {
-                const has = !!SYLLABUS_DATA[d.key];
+                const has = !!SYLLABUS_DATA[d.key] || !!COMPLETE_SYLLABUS[d.key];
                 return (
                   <button
                     key={d.key}
@@ -170,6 +183,30 @@ export default function SyllabusPageView({ content }: { content: Record<string, 
             </p>
           </div>
 
+          {completeSyllabus ? (
+            <div>
+              <div className="mb-3 md:mb-5">
+                <h2 className="font-sans font-black tracking-tighter text-[1.35rem]" style={gradientText}>
+                  {completeSyllabus.code}
+                </h2>
+                <p className="font-mono text-muted text-[0.68rem] mt-0.5">Complete programme syllabus</p>
+              </div>
+              <div className="flex max-w-[820px] flex-col gap-4 rounded-xl bg-white p-5 md:p-6 shadow-card-soft border-l-[3px] border-secondary sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <div className="font-sans font-bold text-foreground text-[1rem]">{completeSyllabus.title}</div>
+                  <div className="mt-0.5 text-muted text-[0.82rem]">{completeSyllabus.meta}</div>
+                </div>
+                <a
+                  href={completeSyllabus.href}
+                  download
+                  className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-secondary px-5 py-2.5 font-sans font-bold text-[0.86rem] text-white transition-colors hover:bg-secondary-pressed"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+          ) : (
+          <>
           {/* Step 2 — Regulation */}
           <div>
             <p className="font-mono text-[0.68rem] font-bold tracking-[0.2em] uppercase text-muted mb-3">{copy('step2Regulation', 'Step 2 — Regulation')}</p>
@@ -257,6 +294,8 @@ export default function SyllabusPageView({ content }: { content: Record<string, 
               <p className="font-sans font-semibold text-foreground text-[0.95rem]">{copy('selectDepartmentRegulationAnd', 'Select department, regulation and semester above')}</p>
               <p className="font-mono text-muted text-[0.72rem] mt-1">{copy('subjectsAppearHereEach', 'Subjects appear here — each links to its official syllabus PDF')}</p>
             </div>
+          )}
+          </>
           )}
 
         </div>

@@ -131,19 +131,22 @@ export default function DepartmentDetail({ department: d }: Props) {
   const visibleTabs = TABS.filter((t) => {
     if (t.id === 'placements') return showPlacements;
     if (t.id === 'mous') return showMous;
-    if (t.id === 'academics') return d.level !== 'pg';
+    if (t.id === 'academics') return d.level !== 'pg' || d.slug === 'mba';
     return true;
   });
 
   // The H&S Curriculum tab shows each branch's Year 1 syllabus instead of the
-  // usual PDFs/catalog/explorer layout — give it its own quick-nav.
+  // usual PDFs/catalog/explorer layout — give it its own quick-nav. MBA shows a
+  // single complete-syllabus document.
   const quickNavItems: { id: string; label: string }[] =
     tab === 'academics' && d.slug === 'hs'
       ? [
           { id: 'syllabus-pdfs',   label: 'Syllabus PDF' },
           { id: 'syllabus-inline', label: 'Year 1 Syllabus' },
         ]
-      : QUICK_NAV[tab];
+      : tab === 'academics' && d.slug === 'mba'
+        ? [{ id: 'syllabus-pdfs', label: 'Syllabus' }]
+        : QUICK_NAV[tab];
 
   // Scroll-spy — highlight nav item matching the section in view.
   // quickNavItems is derived synchronously from tab — listing tab alone is correct.
@@ -1051,6 +1054,29 @@ function FreshmanCurriculumPanel() {
   );
 }
 
+function MbaCurriculumPanel() {
+  return (
+    <div>
+      <PanelHeading id="syllabus-pdfs">Curriculum</PanelHeading>
+
+      <SubHeading>Syllabus</SubHeading>
+      <div className="flex flex-col gap-4 rounded-xl bg-white p-5 md:p-6 shadow-card-soft border-l-[3px] border-secondary transition-all hover:-translate-y-0.5 hover:shadow-card-strong sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <div className="font-sans font-bold text-foreground text-[1rem]">MBA R25 Syllabus</div>
+          <div className="mt-0.5 text-muted text-[0.82rem]">2025 regulation · Word document</div>
+        </div>
+        <a
+          href="/syllabus/mba-r25-syllabus.docx"
+          download
+          className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-secondary px-5 py-2.5 font-sans font-bold text-[0.86rem] text-white transition-colors hover:bg-secondary-pressed"
+        >
+          Download
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function AcademicsPanel({ d }: PanelProps) {
   const availableRegSlugs = SYLLABUS_AVAILABLE[d.slug] ?? [];
   const availableRegs = SYLLABUS_REGS.filter((r) => availableRegSlugs.includes(r.slug));
@@ -1064,6 +1090,7 @@ function AcademicsPanel({ d }: PanelProps) {
   const [activeReg, setActiveReg] = useState(regsWithData[0]?.slug ?? regsForCatalog[0]?.slug ?? 'r25');
 
   if (d.slug === 'hs') return <FreshmanCurriculumPanel />;
+  if (d.slug === 'mba') return <MbaCurriculumPanel />;
 
   const semesters = Array.from({ length: 8 }, (_, i) => {
     const semNum = i + 1;
