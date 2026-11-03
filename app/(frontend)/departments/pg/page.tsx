@@ -48,7 +48,20 @@ export default async function PGPage() {
       <Section surface>
         <H2 italic="(Management)">MBA</H2>
         <Lede>{mba.tagline}</Lede>
-        <Link href="/departments/mba" className="mt-5 md:mt-7 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-foreground text-white font-semibold hover:bg-primary transition-colors">{copy('exploreMbaProgramme', 'Explore MBA programme →')}</Link>
+        <div className="mt-6 max-w-[880px] flex flex-col gap-4 rounded-xl bg-white p-5 md:p-6 shadow-card-soft border-l-[3px] border-secondary sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <div className="font-sans font-bold text-foreground text-[1rem]">MBA R25 Syllabus</div>
+            <div className="mt-0.5 text-muted text-[0.82rem]">2025 regulation · Word document</div>
+          </div>
+          <a
+            href="/syllabus/mba-r25-syllabus.docx"
+            download
+            className="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-secondary px-5 py-2.5 font-sans font-bold text-[0.86rem] text-white transition-colors hover:bg-secondary-pressed"
+          >
+            Download
+          </a>
+        </div>
+        <Link href="/departments/mba" className="mt-8 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-foreground text-white font-semibold hover:bg-primary transition-colors">{copy('exploreMbaProgramme', 'Explore MBA programme →')}</Link>
       </Section>
     </>
   );
