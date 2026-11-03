@@ -7,6 +7,7 @@
 export type InfoBlock =
   | { kind: 'lead'; text: string }
   | { kind: 'paragraph'; text: string }
+  | { kind: 'figure'; src: string; alt: string; width: number; height: number }
   | { kind: 'bullets'; title?: string; items: string[] }
   | { kind: 'bullet-groups'; items: { title: string; items: string[] }[] }
   | { kind: 'stat-grid'; items: { num: string; label: string }[] }

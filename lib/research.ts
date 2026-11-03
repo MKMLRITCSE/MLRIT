@@ -275,6 +275,13 @@ export const RESEARCH_PAGES: Record<string, ResearchPage> = {
     title: 'Research', italic: 'Publications',
     dek: 'Journal and conference publications by MLRIT faculty and research scholars from 2016 onwards. Each year’s consolidated list is available as a downloadable PDF; pick a year below to view.',
     blocks: [
+      {
+        kind: 'figure',
+        src: '/images/research/publications-research.jpeg',
+        alt: 'MLRIT research profile infographic showing Scopus publications and citations, h-index progression, Web of Science publications, patents, and funded projects, snapshot as on 16 September 2026.',
+        width: 904,
+        height: 1280,
+      },
       { kind: 'heading', eyebrow: '2025', title: '120+ papers', italic: 'across five departments.' },
       {
         kind: 'cards',

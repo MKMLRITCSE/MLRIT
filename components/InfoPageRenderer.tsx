@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -136,6 +137,25 @@ function Block({ block, index }: { block: InfoBlock; index: number }) {
       return (
         <Reveal>
           <p className="text-foreground/80 leading-[1.75] text-[clamp(1.05rem,1.25vw,1.2rem)] max-w-[880px]">{block.text}</p>
+        </Reveal>
+      );
+
+    case 'figure':
+      return (
+        <Reveal preset="scale">
+          <figure className="mx-auto w-full max-w-[860px]">
+            <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-card-soft">
+              <Image
+                src={block.src}
+                alt={block.alt}
+                width={block.width}
+                height={block.height}
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 860px"
+                className="h-auto w-full"
+              />
+            </div>
+          </figure>
         </Reveal>
       );
 
