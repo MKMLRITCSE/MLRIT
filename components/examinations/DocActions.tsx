@@ -28,8 +28,9 @@ function DownloadIcon() {
 /**
  * View + Download button pair for a PDF or document link.
  * View opens the file in a new tab; Download triggers a browser download.
- * For external URLs (not hosted on this domain), both buttons open in new tab
- * since cross-origin `download` attribute is blocked by browsers.
+ * For external URLs (not hosted on this domain) both buttons open in a new
+ * tab, because browsers ignore `download` across origins — the PDF viewer
+ * provides the actual save action.
  */
 export default function DocActions({
   href,
@@ -77,10 +78,10 @@ export default function DocActions({
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary
             text-white font-semibold text-[0.75rem] hover:bg-secondary/90
             transition-all whitespace-nowrap"
-          aria-label={`Open ${downloadLabel}`}
+          aria-label={`Download ${downloadLabel}`}
         >
           <DownloadIcon />
-          Open ↗
+          {downloadLabel}
         </a>
       )}
     </div>
