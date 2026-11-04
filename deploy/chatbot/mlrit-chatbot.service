@@ -8,8 +8,8 @@ Wants=network-online.target
 User=ubuntu
 WorkingDirectory=/home/ubuntu/mlrit-final/chatbot
 # GROQ_API_KEY lives here (mode 600), never in the repo. The leading "-" lets
-# the service start without it: fast answers from the site's own data still
-# work, and LLM answers report the missing key in the logs.
+# the unit start before the key has been added; until then /chat answers 503,
+# because the assistant cannot initialise without it (see the service logs).
 EnvironmentFile=-/home/ubuntu/mlrit-chatbot.env
 # Localhost only: nginx forwards /chatbot-api/ to it, nothing else reaches it.
 Environment=HOST=127.0.0.1
@@ -18,6 +18,8 @@ Environment=CORS_ORIGINS=https://mlrit.ac.in,https://www.mlrit.ac.in,https://sub
 # Search index is rebuilt from chatbot/pdfs on first start. Kept outside the
 # repo checkout, which every deploy resets.
 Environment=CHROMA_PERSIST_DIR=/home/ubuntu/chatbot-data/chroma_db
+# ChromaDB's usage telemetry fails on every start with this version and only fills the log.
+Environment=ANONYMIZED_TELEMETRY=False
 ExecStart=/home/ubuntu/chatbot-venv/bin/python main.py
 Restart=on-failure
 RestartSec=5
