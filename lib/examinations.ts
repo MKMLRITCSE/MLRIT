@@ -87,7 +87,10 @@ export const EXAM_DOWNLOADS: ExaminationDocument[] = [
   {
     label: 'Condonation of Attendance Form',
     desc: 'Apply for attendance condonation before the semester examination.',
-    href: `/examinations/condonation-form.pdf?v=${DOC_VERSION}`,
+    // Official host. The same-origin copy is byte-identical, but Cloudflare
+    // still holds an old error page for /examinations/condonation-form.pdf and
+    // serves it until that entry expires, so link to the source document.
+    href: 'https://files.mlrit.ac.in/uploads/Condonation_Form.pdf',
     category: 'forms',
     badge: 'Form',
   },
