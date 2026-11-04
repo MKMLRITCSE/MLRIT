@@ -5,10 +5,30 @@ const B = 'mlrit-website-assets', ROOT = '/home/ubuntu/mlrit-final/public', s3 =
 const T = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', svg: 'image/svg+xml', webp: 'image/webp', gif: 'image/gif', ico: 'image/x-icon', avif: 'image/avif', pdf: 'application/pdf', mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime', json: 'application/json', txt: 'text/plain; charset=utf-8', xml: 'application/xml', css: 'text/css', js: 'text/javascript', woff: 'font/woff', woff2: 'font/woff2', ttf: 'font/ttf', otf: 'font/otf', csv: 'text/csv', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xls: 'application/vnd.ms-excel', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', ppt: 'application/vnd.ms-powerpoint', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', zip: 'application/zip' };
 // Files whose existing S3 object must be replaced. Everything else is
 // upload-once, because S3 holds compressed versions of large files (originals
-// kept under originals/). condonation-form.pdf was first published as an HTML
-// 403 page saved with a .pdf extension, so the stored object has to be
-// overwritten with the real form.
-const FORCE = new Set(['examinations/condonation-form.pdf']);
+// kept under originals/). These objects were first published as error pages
+// saved with a .pdf extension (an HTML 403 page, and five S3 InvalidURI XML
+// responses caused by an en dash encoded as %96), so each has to be
+// overwritten with the real document.
+const FORCE = new Set([
+  'examinations/condonation-form.pdf',
+  'examinations/circulars/Data-Corrections-Reminder-for-B.Tech.-M.Tech.-and-MBA-Students-Verification-of-Student-Details.pdf',
+  'examinations/circulars/I-M.Tech-and-MBA-I-and-II-Semester-Regular-and-Supple-Examinations-February-2026-Results-Released-Revaluation-Notification.pdf',
+  'examinations/circulars/II-B.Tech.-II-Semester-Condonation-Notification-Submission-of-Undertaking-and-Medical-Certificate-on-or-before-01-05-2026.pdf',
+  'examinations/circulars/Issue-of-Provisional-Certificate-and-Consolidated-Grade-Memo-for-B.Tech-2022-26-Batch-Students.pdf',
+  'examinations/circulars/JNTUH-B.Tech.-M.Tech.-and-MBA-Special-Supplementary-One-Time-Chance-Examinations-June-July-2026-Fee-Notification.pdf',
+  'examinations/academic-calendar-2024-25.pdf',
+  'examinations/academic-calendar-2025-26.pdf',
+  'examinations/apply-for-certificates.pdf',
+  'examinations/cbt-form.pdf',
+  'examinations/citizen-charter.pdf',
+  'examinations/coe-profile.pdf',
+  'examinations/duplicate-grade-card.pdf',
+  'examinations/name-correction.pdf',
+  'examinations/plagiarism-check.pdf',
+  'examinations/readmission.pdf',
+  'examinations/student-verification.pdf',
+  'examinations/transcript-form.pdf',
+]);
 const files = []; (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); e.isDirectory() ? walk(p) : e.isFile() && files.push(p); } })(ROOT);
 let up = 0, skip = 0, fail = 0; const failed = [], added = [], replaced = [];
 async function one(p) {
