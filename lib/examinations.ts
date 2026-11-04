@@ -34,6 +34,12 @@ export const EXAMS_NAV: ExamNavItem[] = [
 
 /* ── Document types ───────────────────────────────────────────────────── */
 
+// Cloudflare keeps public/ files for 24h and the deploy purge step is skipped
+// when CF credentials are absent, so a replaced PDF can keep serving the old
+// bytes. The tag gives corrected documents a fresh cache key; bump it whenever
+// a file under public/examinations/ is replaced.
+const DOC_VERSION = '2';
+
 export type DocCategory =
   | 'forms'
   | 'regulations'
@@ -81,7 +87,7 @@ export const EXAM_DOWNLOADS: ExaminationDocument[] = [
   {
     label: 'Condonation of Attendance Form',
     desc: 'Apply for attendance condonation before the semester examination.',
-    href: '/examinations/condonation-form.pdf',
+    href: `/examinations/condonation-form.pdf?v=${DOC_VERSION}`,
     category: 'forms',
     badge: 'Form',
   },
@@ -151,7 +157,7 @@ export const EXAM_CALENDARS: ExaminationDocument[] = [
   {
     label: 'Academic Calendar 2025–26',
     desc: 'Previous academic year reference calendar.',
-    href: '/examinations/academic-calendar-2025-26.pdf',
+    href: `/examinations/academic-calendar-2025-26.pdf?v=${DOC_VERSION}`,
     category: 'calendars',
     badge: 'Calendar',
     tag: '2025–26',

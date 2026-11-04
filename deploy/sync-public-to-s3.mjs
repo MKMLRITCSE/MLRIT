@@ -39,7 +39,9 @@ async function one(p) {
   }
   const ext = path.extname(p).slice(1).toLowerCase();
   for (let a = 0; a < 3; a++) {
-    try { await s3.send(new PutObjectCommand({ Bucket: B, Key, Body: fs.createReadStream(p), ContentLength: size, ContentType: T[ext] || 'application/octet-stream', CacheControl: 'public, max-age=86400' })); up++; (force ? replaced : added).push(rel); return; }
+    // Corrected files get a short edge TTL so a later fix is visible quickly.
+    const cache = force ? 'public, max-age=300' : 'public, max-age=86400';
+    try { await s3.send(new PutObjectCommand({ Bucket: B, Key, Body: fs.createReadStream(p), ContentLength: size, ContentType: T[ext] || 'application/octet-stream', CacheControl: cache })); up++; (force ? replaced : added).push(rel); return; }
     catch (e) { if (a === 2) { fail++; failed.push(rel + ' ' + e.name); } }
   }
 }
