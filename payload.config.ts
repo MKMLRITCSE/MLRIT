@@ -10,6 +10,7 @@ import sharp from 'sharp';
 import { Media } from './payload/collections/Media';
 import { Users } from './payload/collections/Users';
 import { sectionGlobals } from './payload/globals';
+import { MEDIA_PREFIX, publicMediaUrl } from './lib/content/media-url';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,7 +30,13 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const storagePlugins = process.env.S3_BUCKET
   ? [
       s3Storage({
-        collections: { media: true },
+        // Uploads go under site/media/, the publicly readable part of the
+        // bucket, and each file's URL is its /media/... path on the site itself
+        // (nginx serves it from S3, Cloudflare caches it) rather than a
+        // download proxied through this app. Composite prefixes keep the
+        // upload key and that URL derived from the same folder.
+        collections: { media: { prefix: MEDIA_PREFIX, generateFileURL: publicMediaUrl } },
+        useCompositePrefixes: true,
         bucket: process.env.S3_BUCKET,
         config: { region: process.env.AWS_REGION ?? 'ap-south-1' },
       }),

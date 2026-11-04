@@ -47,8 +47,8 @@ const mediaField = (
   label,
   admin: {
     description:
-      `${accept === 'document' ? 'PDF' : accept} — upload under Media, then paste its URL here. ` +
-      'A rooted path (/legacy/…) or an external URL also works.',
+      `${accept === 'document' ? 'PDF' : accept} — upload under Administration → Media, copy the file's URL ` +
+      '(it starts with /media/) and paste it here. A path on the site (/examinations/…) or a link from the S3 bucket also works.',
   },
   // Rejects blob:/data: — a handle into one browser document that renders as
   // a broken asset once saved. One such URL reached the live homepage under
@@ -64,6 +64,14 @@ const repeaterColumn = (column: RepeaterItemField): Field => {
   }
   if (column.type === 'number') {
     return { name: column.name, type: 'number', label: column.label };
+  }
+  if (column.type === 'select') {
+    return {
+      name: column.name,
+      type: 'select',
+      label: column.label,
+      options: [...(column.options ?? [])],
+    };
   }
   return { name: column.name, type: 'text', label: column.label };
 };
