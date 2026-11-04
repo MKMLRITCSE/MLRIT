@@ -30,8 +30,17 @@ _missing_logged = set()
 
 def resolve(relative_path: str) -> str:
     """Resolves a path like 'lib/faculty.ts' or 'app/iqac/page.tsx' — always
-    relative to the repository root, never to '../' — against FRONTEND_ROOT."""
-    return os.path.join(FRONTEND_ROOT, relative_path)
+    relative to the repository root, never to '../' — against FRONTEND_ROOT.
+
+    Pages live under app/(frontend)/ (a Next.js route group). Callers keep the
+    public-looking 'app/admissions/page.tsx' form; it is mapped here, in the one
+    place every data file is resolved, when the file is not at the plain path."""
+    path = os.path.join(FRONTEND_ROOT, relative_path)
+    if relative_path.startswith("app/") and not os.path.exists(path):
+        grouped = os.path.join(FRONTEND_ROOT, "app", "(frontend)", relative_path[len("app/"):])
+        if os.path.exists(grouped):
+            return grouped
+    return path
 
 
 def read_text(relative_path: str, feature: str = "") -> Optional[str]:

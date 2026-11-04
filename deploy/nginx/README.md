@@ -30,6 +30,22 @@ Check with `curl -sI 'https://mlrit.ac.in/_next/image?url=%2Flegacy%2Fmlrit-logo
 `X-Cache-Status` is `MISS` on the first request and `HIT` after. To clear the
 cache: `sudo rm -rf /var/cache/nginx/next-image/*`.
 
+## Chatbot
+
+The chatbot is a Python service (`chatbot/`) running on this same server. The
+widget calls `/chatbot-api/chat` on the site's own origin and nginx forwards it
+to the service on `127.0.0.1:8001`; nothing else about it is public.
+
+Files: `chatbot.conf` -> `/etc/nginx/snippets/chatbot.conf` (included from
+`s3-assets.conf`, which must be re-installed too) and `chatbot-rate.conf` ->
+`/etc/nginx/conf.d/chatbot-rate.conf` (20 messages a minute per visitor). Only
+`/chat` and `/health` are exposed; `/reindex`, `/docs` and `/routes` are not.
+
+Install order matters, because the snippet include fails `nginx -t` if the
+files are missing: copy `chatbot-rate.conf` and `chatbot.conf` first, then
+`s3-assets.conf`, then `sudo nginx -t && sudo systemctl reload nginx`. The
+service itself is set up by `deploy/chatbot/setup.sh` (see that folder).
+
 ## Payload media in S3
 
 Payload uploads (the `media` collection) are stored in the same bucket, at the

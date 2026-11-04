@@ -25,6 +25,11 @@ rm -rf "$A/.next.prev" && mv "$A/.next" "$A/.next.prev" && mv "$B/.next" "$A/.ne
 pm2 restart mlrit --update-env && pm2 save
 rm -rf "$B"
 
+# Chatbot service (only if set up; see deploy/chatbot/). It answers from the
+# site's own source files, so restart it onto what just deployed. A problem here
+# must never fail the site deploy.
+timeout 600 bash deploy/chatbot/update.sh || echo "chatbot update failed; the site deploy is unaffected"
+
 # Health check; roll back to the previous build if the new one does not answer.
 code=000
 for i in $(seq 1 10); do
