@@ -10,6 +10,7 @@ export const CIRCULAR_CATEGORIES = ['Timetable', 'Fee', 'Results', 'Notice', 'Co
 export type CircularCategory = (typeof CIRCULAR_CATEGORIES)[number];
 
 export const DEFAULT_CIRCULARS = [
+  { id: "postponement-and-reschedule-of-iv-i-b-tech-mid-ii-examinations", title: "Postponement and Reschedule of IV-I B.Tech MID-II Examinations Scheduled on 05-11-2026 to 07-11-2026", category: "Notice", date: "November 4, 2026", file: "/examinations/circulars/Postponement-and-Reschedule-of-IV-I-B.Tech-MID-II-Examinations-Scheduled-on-05-11-2026-to-07-11-2026.pdf" },
   { id: "i-b-tech-i-sem-regular-and-supply-and-i-b-tech-ii-sem-supply", title: "I B.Tech I Sem Regular/Supply and I B.Tech II Sem Supply Examinations December 2026 Fee Notification", category: "Fee", date: "October 29, 2026", file: "/examinations/circulars/I-B.Tech-I-Sem.-Regular-and-Supply-and-I-B.Tech.-II-Sem.-Supply-Examinations-December-2026-Fee-Notification.pdf" },
   { id: "iv-b-tech-i-sem-practical-regular-examinations-november-2026", title: "IV B.Tech I Sem - Practical Regular Examinations November 2026 Timetable", category: "Timetable", date: "October 27, 2026", file: "/examinations/circulars/IV-B.Tech.-I-Sem.-Practical-Regular-Examinations-November-2026-Timetable.pdf" },
   { id: "iii-b-tech-i-sem-practical-regular-examinations-november-202", title: "III B.Tech I Sem - Practical Regular Examinations November 2026 Timetable", category: "Timetable", date: "October 27, 2026", file: "/examinations/circulars/III-B.Tech.-I-Sem.-Practical-Regular-Examinations-November-2026-Timetable.pdf" },

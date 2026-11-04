@@ -2194,6 +2194,17 @@ export const SYLLABUS_DATA: Record<string, Record<string, Record<number, Syllabu
   },
 };
 
+const R25_COMPLETE: Record<string, string> = {
+  cse:  '/syllabus/cse-r25-complete.pdf',
+  aiml: '/syllabus/aiml-r25-syllabus.pdf',
+};
+
 export function getSyllabusCourses(program: string, regulation: string, sem: number): SyllabusCourse[] {
-  return SYLLABUS_DATA[program]?.[regulation]?.[sem] ?? [];
+  const courses = SYLLABUS_DATA[program]?.[regulation]?.[sem] ?? [];
+  // R25 subject-wise PDFs are not published yet. Point those rows at the
+  // programme's complete R25 syllabus instead of leaving href empty (which
+  // just reloaded the page).
+  const complete = regulation === 'r25' ? R25_COMPLETE[program] : undefined;
+  if (!complete) return courses;
+  return courses.map((c) => (c.pdf ? c : { ...c, pdf: complete }));
 }
