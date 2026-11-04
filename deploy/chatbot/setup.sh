@@ -13,7 +13,11 @@ DATA=/home/ubuntu/chatbot-data
 ENVF=/home/ubuntu/mlrit-chatbot.env
 as_ubuntu() { sudo -u ubuntu -H "$@"; }
 
-as_ubuntu python3 -m venv "$VENV" 2>/dev/null || { apt-get install -y python3-venv >/dev/null; as_ubuntu python3 -m venv "$VENV"; }
+# chromadb pins chroma-hnswlib 0.7.3, which has no prebuilt wheel for this Python
+# and is compiled from source (the chatbot Dockerfile installs build-essential
+# for the same reason).
+DEBIAN_FRONTEND=noninteractive apt-get install -y -qq build-essential python3-dev python3-venv >/dev/null
+as_ubuntu python3 -m venv "$VENV"
 as_ubuntu "$VENV/bin/pip" install --quiet --upgrade pip
 
 # CPU-only PyTorch (~200 MB). The default Linux wheel bundles CUDA libraries
