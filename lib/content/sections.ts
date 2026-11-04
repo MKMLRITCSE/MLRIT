@@ -1781,7 +1781,7 @@ export const CONTENT_SECTIONS = {
       // from Media (or paste its link) and it appears on /examinations/circulars,
       // newest first. Starts with the circulars that were hardcoded in the page.
       {
-        name: 'circulars',
+        name: 'circularList',
         label: 'Circulars',
         type: 'repeater',
         itemFields: [

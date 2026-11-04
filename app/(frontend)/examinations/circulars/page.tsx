@@ -32,7 +32,7 @@ export default async function CircularsPage() {
   const row = await getSection('examinations', 'circulars').catch(() => null);
   const c = (row?.content ?? {}) as Record<string, unknown>;
   const copy = (key: string, fallback: string) => asText(c[key], fallback);
-  const circulars = circularsFrom(c.circulars);
+  const circulars = circularsFrom(c.circularList);
 
   return (
     <>
