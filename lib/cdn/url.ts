@@ -30,6 +30,11 @@ export const resolveAssetUrl = (
   if (value.startsWith('https://mlrit-next.vercel.app/assets/'))
     return value.replace('https://mlrit-next.vercel.app/assets/', '/images/events/');
 
+  // A link pasted straight from the bucket is served through the site itself
+  // (nginx proxies it from S3), so it gets a real Download button and the CDN.
+  const bucket = 'https://mlrit-website-assets.s3.ap-south-1.amazonaws.com/site/';
+  if (value.startsWith(bucket)) return '/' + value.slice(bucket.length);
+
   if (value.startsWith('/') || /^https?:\/\//i.test(value)) return value;
   return `/cdn/${value}`;
 };

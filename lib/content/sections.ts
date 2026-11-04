@@ -1,3 +1,5 @@
+import { CIRCULAR_CATEGORIES, DEFAULT_CIRCULARS } from './circulars-data';
+
 /**
  * Every CMS-editable section, keyed by `${page}/${section}` — the same pair
  * used for the content_blocks lookup and the /admin/[page]/[section] route.
@@ -1775,6 +1777,21 @@ export const CONTENT_SECTIONS = {
     label: 'Examinations — Circulars',
     previewPath: '/examinations/circulars',
     fields: [
+      // One row per circular. Add a row to publish a new one: pick the PDF
+      // from Media (or paste its link) and it appears on /examinations/circulars,
+      // newest first. Starts with the circulars that were hardcoded in the page.
+      {
+        name: 'circulars',
+        label: 'Circulars',
+        type: 'repeater',
+        itemFields: [
+          { name: 'title', label: 'Title' },
+          { name: 'category', label: 'Category', type: 'select', options: CIRCULAR_CATEGORIES },
+          { name: 'date', label: 'Date, as shown on the page (e.g. October 29, 2026)' },
+          { name: 'file', label: 'PDF', type: 'document' },
+        ],
+        defaultItems: DEFAULT_CIRCULARS,
+      },
       { name: 'viewLabel', label: "View", defaultValue: "View" },
       { name: 'downloadLabel', label: "Download", defaultValue: "Download" },
       { name: 'allDocumentsBelowAre', label: "All documents below are hosted locally. Use Vi…", multiline: true, defaultValue: "All documents below are hosted locally. Use View to open in-browser or Download to save a copy." },
@@ -2505,7 +2522,9 @@ export type RepeaterItemField = {
    * row can carry several files — an event slide needs a logo, a clip and a
    * poster, which a single `key` cannot express.
    */
-  readonly type?: 'text' | 'number' | 'image' | 'video' | 'document';
+  readonly type?: 'text' | 'number' | 'select' | 'image' | 'video' | 'document';
+  /** `select` columns only: the choices offered in the editor. */
+  readonly options?: readonly string[];
 };
 
 /** Columns that hold an uploaded asset key rather than typed text. */
