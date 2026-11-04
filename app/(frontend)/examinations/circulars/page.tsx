@@ -21,6 +21,13 @@ type Circular = {
 };
 
 const CIRCULARS: Circular[] = [
+  // ── November 2026 ───────────────────────────────────────────────────────────
+  {
+    title: 'Postponement and Reschedule of IV-I B.Tech MID-II Examinations Scheduled on 05-11-2026 to 07-11-2026',
+    file: 'Postponement-and-Reschedule-of-IV-I-B.Tech-MID-II-Examinations-Scheduled-on-05-11-2026-to-07-11-2026.pdf',
+    category: 'Notice',
+    date: 'November 4, 2026',
+  },
   // ── October 2026 ────────────────────────────────────────────────────────────
   {
     title: 'I B.Tech I Sem Regular/Supply and I B.Tech II Sem Supply Examinations December 2026 Fee Notification',
