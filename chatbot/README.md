@@ -169,7 +169,17 @@ Returns all configured website navigation routes.
 
 ## Frontend Integration
 
-The chatbot is integrated natively as a React component — `components/Chatbot.tsx`, mounted globally in `app/layout.tsx`. It talks to this backend over `NEXT_PUBLIC_CHATBOT_URL` (see the root `README.md`'s Environment Variables section). There is no standalone JS widget or static bundle to embed elsewhere.
+The chatbot is integrated natively as a React component — `components/Chatbot.tsx`, mounted globally in `app/layout.tsx`. There is no standalone JS widget or static bundle to embed elsewhere.
+
+In production the widget calls `/chatbot-api/chat` on the site's own origin, and nginx forwards it to this service on the same server (`deploy/nginx/chatbot.conf`). Locally it talks to `http://127.0.0.1:8001` directly. Set `NEXT_PUBLIC_CHATBOT_URL` to override either.
+
+## Running on the EC2 server
+
+The service runs under systemd (`mlrit-chatbot`) in a virtualenv at `/home/ubuntu/chatbot-venv`, listening on localhost only. `deploy/chatbot/setup.sh` creates all of it once; every deploy then runs `deploy/chatbot/update.sh`, which restarts it onto the new site files (it reads the site's own source) and reinstalls packages only if `requirements.txt` changed.
+
+The Groq key goes in `/home/ubuntu/mlrit-chatbot.env` (mode 600) as `GROQ_API_KEY=...`, never in the repo. The search index is built from `pdfs/` on first start and kept in `/home/ubuntu/chatbot-data/`.
+
+Useful commands: `sudo systemctl status mlrit-chatbot`, `journalctl -u mlrit-chatbot -n 100`, `curl http://127.0.0.1:8001/health`.
 
 ---
 

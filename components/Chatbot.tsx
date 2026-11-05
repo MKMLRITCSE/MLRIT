@@ -30,25 +30,13 @@ type ConnectionStatus = 'idle' | 'connecting' | 'online' | 'offline';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
+// In production the chatbot runs on the same server as the site and nginx
+// forwards /chatbot-api/ to it (deploy/nginx/chatbot.conf), so the widget calls
+// the site's own origin: no CORS, no extra public port. A visitor's browser can
+// never reach 127.0.0.1, so that address is only the local-development default.
 const CHATBOT_URL =
-  process.env.NEXT_PUBLIC_CHATBOT_URL ?? 'http://127.0.0.1:8001';
-
-// The localhost fallback above is for local development only — if this ships to
-// production without NEXT_PUBLIC_CHATBOT_URL set, every visitor's browser tries
-// to reach their own machine, not the real backend. Fail loudly instead of
-// silently degrading to a "can't connect" state with no clue why.
-if (
-  process.env.NODE_ENV === 'production' &&
-  !process.env.NEXT_PUBLIC_CHATBOT_URL &&
-  typeof window !== 'undefined'
-) {
-  // eslint-disable-next-line no-console
-  console.error(
-    '[MLRIT Assistant] NEXT_PUBLIC_CHATBOT_URL is not set in this production build — ' +
-      'the chatbot is falling back to http://127.0.0.1:8001, which will not work for site visitors. ' +
-      'Set NEXT_PUBLIC_CHATBOT_URL to the deployed chatbot backend URL.'
-  );
-}
+  process.env.NEXT_PUBLIC_CHATBOT_URL ??
+  (process.env.NODE_ENV === 'production' ? '/chatbot-api' : 'http://127.0.0.1:8001');
 
 const WELCOME_MESSAGE: Message = {
   role: 'assistant',

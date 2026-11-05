@@ -1,0 +1,34 @@
+# Installed as /etc/systemd/system/mlrit-chatbot.service by deploy/chatbot/setup.sh
+[Unit]
+Description=MLRIT website chatbot (FastAPI + RAG)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/mlrit-final/chatbot
+# GROQ_API_KEY lives here (mode 600), never in the repo. The leading "-" lets
+# the unit start before the key has been added; until then /chat answers 503,
+# because the assistant cannot initialise without it (see the service logs).
+EnvironmentFile=-/home/ubuntu/mlrit-chatbot.env
+# Localhost only: nginx forwards /chatbot-api/ to it, nothing else reaches it.
+Environment=HOST=127.0.0.1
+Environment=PORT=8001
+Environment=CORS_ORIGINS=https://mlrit.ac.in,https://www.mlrit.ac.in,https://sub.mlrit.ac.in
+# Search index is rebuilt from chatbot/pdfs on first start. Kept outside the
+# repo checkout, which every deploy resets.
+Environment=CHROMA_PERSIST_DIR=/home/ubuntu/chatbot-data/chroma_db
+# ChromaDB's usage telemetry fails on every start with this version and only fills the log.
+Environment=ANONYMIZED_TELEMETRY=False
+ExecStart=/home/ubuntu/chatbot-venv/bin/python main.py
+Restart=on-failure
+RestartSec=5
+# The site is built on this same machine (a Next.js build peaks near 3 GB).
+# Cap the chatbot and make it the first thing the kernel gives up under
+# memory pressure, so a build can never take the website down with it.
+MemoryHigh=1300M
+MemoryMax=1700M
+OOMScoreAdjust=500
+
+[Install]
+WantedBy=multi-user.target
