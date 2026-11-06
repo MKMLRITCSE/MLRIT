@@ -316,7 +316,7 @@ export default function AdmissionsPageView({ content }: { content: Record<string
                 </Link>
                 <a
                   href={brochureUrl}
-                  download="MLRIT-Brochure-2025-26.pdf"
+                  download="MLRIT-Brochure-2026.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/10 border border-white/25 text-white font-semibold text-sm hover:bg-white/20 transition-all"

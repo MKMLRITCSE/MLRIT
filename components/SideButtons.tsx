@@ -185,7 +185,7 @@ export default function SideButtons({ brochureUrl = DEFAULT_BROCHURE }: { brochu
         {/* Brochure tab */}
         <a
           href={brochureUrl}
-          download="MLRIT-Brochure-2025-26.pdf"
+          download="MLRIT-Brochure-2026.pdf"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Download Brochure"

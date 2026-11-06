@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PageHeader from '@/components/PageHeader';
 import { Section, H2, Lede } from '@/components/PageSection';
+import { DEFAULT_BROCHURE } from '@/lib/content/documents-shared';
 
 export const metadata: Metadata = {
   title: 'Mandatory Disclosures — MLRIT',
@@ -14,7 +15,7 @@ const DOCS = [
   { tag: 'Disclosure', label: 'Mandatory Disclosure 2024-25', href: 'https://files.mlrit.ac.in/uploads/2024-25.pdf' },
   { tag: 'Disclosure', label: 'Mandatory Disclosure 2023-24', href: 'https://files.mlrit.ac.in/uploads/2023-24.pdf' },
   { tag: 'Disclosure', label: 'Mandatory Disclosure 2022-23', href: 'https://files.mlrit.ac.in/uploads/AICTEMandatoryDisclosure-2022-23.pdf' },
-  { tag: 'Brochure', label: 'Institutional Brochure 2025-26', href: '/admissions/mlrit-brochure.pdf' },
+  { tag: 'Brochure', label: 'Institutional Brochure 2026', href: DEFAULT_BROCHURE },
 ];
 
 export default function MandatoryDisclosuresPage() {

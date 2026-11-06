@@ -7,4 +7,4 @@
  * client graph, and /admin died rendering next/link with React's dispatcher
  * null. Same trap as sectionDomId and resolveAssetUrl.
  */
-export const DEFAULT_BROCHURE = '/admissions/mlrit-brochure.pdf';
+export const DEFAULT_BROCHURE = 'https://files.mlrit.ac.in/uploads/Brochure26.pdf';

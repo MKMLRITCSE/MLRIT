@@ -4,6 +4,8 @@
  * can render every page consistently.
  */
 
+import { DEFAULT_BROCHURE } from '@/lib/content/documents-shared';
+
 export type InfoBlock =
   | { kind: 'lead'; text: string }
   | { kind: 'paragraph'; text: string }
@@ -231,9 +233,9 @@ export const INFO_PAGES: Record<string, InfoPage> = {
       {
         kind: 'brochure-card',
         title: 'MLR Institute of Technology',
-        subtitle: 'Institutional Brochure 2025–26',
-        meta: 'PDF · 30.5 MB · English',
-        href: '/admissions/mlrit-brochure.pdf',
+        subtitle: 'Institutional Brochure 2026',
+        meta: 'PDF · English',
+        href: DEFAULT_BROCHURE,
         external: true,
       },
       { kind: 'heading', eyebrow: "What's Inside", title: 'A complete look at', italic: 'campus life.' },
