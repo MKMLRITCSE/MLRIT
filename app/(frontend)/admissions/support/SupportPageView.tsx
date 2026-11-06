@@ -1,7 +1,9 @@
 'use client';
 
 
-import { asText } from '@/lib/content/sections';import { useState, useMemo } from 'react';
+import { asText } from '@/lib/content/sections';
+import { SUPPORT_CONTACTS } from '@/lib/content/support-contacts';
+import { useState, useMemo } from 'react';
 import PageHeader from '@/components/PageHeader';
 import Reveal from '@/components/motion/Reveal';
 import MapEmbed from '@/components/MapEmbed';
@@ -210,49 +212,100 @@ export default function SupportPageView({ content }: { content: Record<string, u
           <Reveal preset="up">
             <div>
               <h2 className="font-sans font-black tracking-tighter-2 text-[1.15rem] md:text-[1.4rem] text-foreground mb-5">{copy('keyContacts', 'Key Contacts')}</h2>
-              <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-card-soft overflow-x-auto">
-                <table className="w-full text-left text-[0.88rem]">
-                  <thead className="bg-warm-light border-b border-border">
-                    <tr>
-                      <th className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('name', 'Name')}</th>
-                      <th className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted hidden md:table-cell">{copy('designation', 'Designation')}</th>
-                      <th className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('contact', 'Contact')}</th>
-                      <th className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted hidden lg:table-cell">{copy('email', 'Email')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { name: 'Dr. P. Sridhar',            role: 'Principal',                           phone: '91604 04636', email: 'principal@mlrinstitutions.ac.in' },
-                      { name: 'Dr. CH Achireddy',           role: 'Admissions I/C',                      phone: '98666 52122', email: 'admissions@mlrinstitutions.ac.in' },
-                      { name: 'Mr. P Ravi Chandra',         role: 'Head – Placements',                   phone: '98499 91299', email: 'ravichandra@mlrinstitutions.ac.in' },
-                      { name: 'Mr. S. Arun Kumar',          role: 'Asst. TPO',                           phone: '98661 93405', email: 'placements@mlrinstitutions.ac.in' },
-                      { name: 'Dr. Ajmeera Kiran',          role: 'HOD – CSE',                           phone: '97045 45364', email: 'hodcse@mlrinstitutions.ac.in' },
-                      { name: 'Dr. S.V.S Prasad',           role: 'HOD – ECE',                           phone: '91604 04638', email: 'hodece@mlrinstitutions.ac.in' },
-                      { name: 'Dr. Kashi Sai Prasad',       role: 'HOD – CSE (AIML)',                    phone: '95059 95544', email: 'hodaiml@mlrinstitutions.ac.in' },
-                      { name: 'Dr. M. Satyanarayana Gupta', role: 'HOD – Aeronautical & Hostel I/C',     phone: '91604 04640', email: 'aerohod@mlrinstitutions.ac.in' },
-                      { name: 'Mr. G. Prabhakar Reddy',     role: 'Controller of Examinations',          phone: '91009 63025', email: 'coe@mlrinstitutions.ac.in' },
-                      { name: 'Mr. A. Koti Reddy',          role: 'Head – Library',                      phone: '94406 53380', email: 'librarian@mlrinstitutions.ac.in' },
-                      { name: 'Mr. M. Ganesh',              role: 'Administrative Officer',              phone: '98663 92008', email: 'sao@mlrinstitutions.ac.in' },
-                      { name: 'Mr. Ravi',                   role: 'Scholarship Incharge',                phone: '91770 80807', email: 'scholarship@mlrinstitutions.ac.in' },
-                    ].map((c, i) => (
-                      <tr key={c.name} className={`border-t border-border ${i % 2 === 0 ? '' : 'bg-warm-light/20'}`}>
-                        <td className="px-5 py-3 font-sans font-semibold text-foreground">{c.name}</td>
-                        <td className="px-5 py-3 text-muted hidden md:table-cell">{c.role}</td>
-                        <td className="px-5 py-3 whitespace-nowrap">
-                          <a href={`tel:+91${c.phone.replace(/\s/g,'')}`} className="font-mono text-secondary hover:underline text-[0.85rem] whitespace-nowrap">
+              {/* Desktop / tablet: full table. Emails and designations stay visible
+                  at every breakpoint, so the table never hides a contact detail. */}
+              <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-white shadow-card-soft">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[0.88rem]">
+                    <caption className="sr-only">MLRIT heads and key contacts with phone numbers and email addresses</caption>
+                    <thead className="bg-warm-light border-b border-border">
+                      <tr>
+                        <th scope="col" className="w-14 px-4 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">S.No</th>
+                        <th scope="col" className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('name', 'Name')}</th>
+                        <th scope="col" className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('designation', 'Designation')}</th>
+                        <th scope="col" className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('contact', 'Contact No')}</th>
+                        <th scope="col" className="px-5 py-3 font-mono text-[0.65rem] tracking-[0.14em] uppercase text-muted">{copy('email', 'Email ID')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {SUPPORT_CONTACTS.map((c, i) => (
+                        <tr key={c.sno} className={`border-t border-border ${i % 2 === 0 ? '' : 'bg-warm-light/20'}`}>
+                          <td className="px-4 py-3 font-mono text-[0.78rem] text-muted">{c.sno}</td>
+                          <td className="px-5 py-3 font-sans font-semibold text-foreground">{c.name}</td>
+                          <td className="px-5 py-3 text-muted">{c.role}</td>
+                          <td className="px-5 py-3 whitespace-nowrap">
+                            <a
+                              href={`tel:+91${c.phone}`}
+                              aria-label={`Call ${c.name} at +91 ${c.phone}`}
+                              className="font-mono text-secondary hover:underline text-[0.85rem] whitespace-nowrap"
+                            >
+                              {c.phone}
+                            </a>
+                          </td>
+                          <td className="px-5 py-3">
+                            {c.email ? (
+                              <a
+                                href={`mailto:${c.email}`}
+                                aria-label={`Email ${c.name} at ${c.email}`}
+                                className="text-muted hover:text-primary transition-colors text-[0.8rem] break-all"
+                              >
+                                {c.email}
+                              </a>
+                            ) : (
+                              <span className="text-subtle italic text-[0.8rem]">Not provided</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Mobile: stacked cards keep every field readable without a
+                  horizontally scrolling five-column table. */}
+              <ul className="md:hidden space-y-3">
+                {SUPPORT_CONTACTS.map((c) => (
+                  <li key={c.sno} className="rounded-2xl border border-border bg-white shadow-card-soft p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="w-7 h-7 rounded-full bg-warm-light border border-border font-mono text-[0.7rem] text-muted flex items-center justify-center flex-shrink-0 mt-0.5">
+                        {c.sno}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-sans font-semibold text-foreground text-[0.95rem] leading-snug">{c.name}</p>
+                        <p className="text-muted text-[0.82rem] mt-0.5">{c.role}</p>
+                        <div className="mt-3 flex flex-col gap-2">
+                          <a
+                            href={`tel:+91${c.phone}`}
+                            aria-label={`Call ${c.name} at +91 ${c.phone}`}
+                            className="inline-flex items-center gap-2 text-secondary font-mono font-semibold text-[0.85rem] hover:underline break-all"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden className="flex-shrink-0">
+                              <path d="M12 9.17a.7.7 0 01-.23.46l-.94.94a.7.7 0 01-.55.19C4.61 10.76 3.28 4.67 3.28 4.67a.7.7 0 01.23-.7l.94-.94a.7.7 0 01.47-.19l1.75 3.5a.7.7 0 01-.19.89l-.56.56a4.2 4.2 0 00.35.35 4.2 4.2 0 00.35.35l.56-.56a.7.7 0 01.89-.19l3.5 1.75z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
                             {c.phone}
                           </a>
-                        </td>
-                        <td className="px-5 py-3 hidden lg:table-cell">
-                          <a href={`mailto:${c.email}`} className="text-muted hover:text-primary transition-colors text-[0.82rem]">
-                            {c.email}
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          {c.email ? (
+                            <a
+                              href={`mailto:${c.email}`}
+                              aria-label={`Email ${c.name} at ${c.email}`}
+                              className="inline-flex items-start gap-2 text-secondary text-[0.82rem] hover:underline break-all"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden className="flex-shrink-0 mt-[2px]">
+                                <rect x="1" y="3" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
+                                <path d="M1 5l6 3.5L13 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                              </svg>
+                              <span className="break-all">{c.email}</span>
+                            </a>
+                          ) : (
+                            <span className="text-subtle italic text-[0.82rem]">Email — Not provided</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
 
